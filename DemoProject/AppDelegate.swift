@@ -6,14 +6,32 @@
 //
 
 import UIKit
+import Parse
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let configuration = ParseClientConfiguration { (ParseMutableClientConfiguration) in
+            ParseMutableClientConfiguration.applicationId = "XMNQQxZn8Kio3cdlcGamtyd7tLE3bzlIBqjQqieM"
+            ParseMutableClientConfiguration.clientKey = "Cogs6AwBox4VrdmTi5J6c4jSV4ZsXwsSzA0xbi1v"
+            ParseMutableClientConfiguration.server = "https://parseapi.back4app.com/"
+            
+        }
+        Parse.initialize(with: configuration)
+        
+        let defaultACL = PFACL()
+        defaultACL.hasPublicReadAccess = true
+        defaultACL.hasPublicWriteAccess = true
+        
+        PFACL.setDefault(defaultACL, withAccessForCurrentUser: true)
+        
+        rememberUser()
+        
         return true
     }
 
@@ -31,6 +49,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    
+    func rememberUser(){
+        
+        let user: String? = UserDefaults.standard.string(forKey: "username")
+        
+        if user != nil {
+            
+            let board : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let tabBar = board.instantiateViewController(identifier: "tabBar") as! UITabBarController
+            
+            window?.rootViewController = tabBar
+            
+         }
+        
+    }
 
 }
 
