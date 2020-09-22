@@ -30,7 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFACL.setDefault(defaultACL, withAccessForCurrentUser: true)
         
-        rememberUser()
+        if (PFUser.current() == nil){
+             
+          
+        }
+        
+//        rememberUser()
         
         return true
     }
@@ -50,21 +55,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     
-    func rememberUser(){
-        
-        let user: String? = UserDefaults.standard.string(forKey: "username")
-        
-        if user != nil {
-            
-            let board : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            let tabBar = board.instantiateViewController(identifier: "tabBar") as! UITabBarController
-            
-            window?.rootViewController = tabBar
-            
-         }
-        
-    }
+//    func rememberUser(){
+//
+//        let user: String? = UserDefaults.standard.string(forKey: "username")
+//
+//        if user != nil {
+//
+//            let board : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//            let tabBar = board.instantiateViewController(identifier: "tabBar") as! UITabBarController
+//
+//            window?.rootViewController = tabBar
+//
+//         }
+//
+//    }
 
 }
 

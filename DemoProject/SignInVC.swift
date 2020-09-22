@@ -15,33 +15,27 @@ class SignInVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//veri ekleme
-//        let parseObject = PFObject(className: "Fruits")
-//        parseObject["name"] = "Banana"
-//        parseObject["calories"] = 150
-//        parseObject.saveInBackground { (success, error) in
-//            if error != nil {
-//
-//                print(error?.localizedDescription)
-//
-//            }else {
-//                print("Saved")
-//            }
-//        }
         
-//        veri cekme
-//        let query = PFQuery(className: "Fruits")
-//        filtreleme
-//        query.whereKey("calories", greaterThan: 120)
-//        query.whereKey("name", equalTo: "Apple")
-//        query.findObjectsInBackground { (objects, error) in
-//            if error != nil {
-//                print(error?.localizedDescription)
-//            }else{
-//                print(objects)
-//            }
-//        }
         
+        
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let currentUser = PFUser.current()
+        if currentUser != nil{
+            loadHomeScreen()
+        }
+    }
+    
+    
+    func loadHomeScreen(){
+    
+
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let loggedInViewController = storyBoard.instantiateViewController(withIdentifier: "feedVC") as! FeedVC
+        loggedInViewController.modalPresentationStyle = .fullScreen
+        self.present(loggedInViewController, animated: true, completion: nil)
         
     }
     
@@ -49,7 +43,11 @@ class SignInVC: UIViewController {
     @IBAction func signInClicked(_ sender: Any) {
         if userNameText.text != "" && passwordText.text != ""{
             
+            let sv = UIViewController.displaySpinner(onView: self.view)
+            
             PFUser.logInWithUsername(inBackground: userNameText.text!, password: passwordText.text!) { (user, error) in
+                
+                UIViewController.removeSpinner(spinner: sv)
                 
                 if error != nil {
 //                    Eger giris sirasinda bir problem olursa alert devreye girer
@@ -62,11 +60,10 @@ class SignInVC: UIViewController {
 //                    remember user function
                     UserDefaults.standard.setValue(self.userNameText.text!, forKey: "username")
                     UserDefaults.standard.synchronize()
-
-                    let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                    delegate.rememberUser()
+                    self.loadHomeScreen()
+//                    let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+//                    delegate.rememberUser()
 //                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
-                    
                 }
                 
             }
@@ -88,7 +85,9 @@ class SignInVC: UIViewController {
                 user.username = userNameText.text!
                 user.password = passwordText.text!
             
+            let sv = UIViewController.displaySpinner(onView: self.view)
             user.signUpInBackground { (success, error) in
+                UIViewController.removeSpinner(spinner: sv)
                 if error != nil {
 //Eger kayit sirasinda bir problem olursa alert devreye girer
                     let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertController.Style.alert)
@@ -100,9 +99,10 @@ class SignInVC: UIViewController {
                     
                     UserDefaults.standard.setValue(self.userNameText.text!, forKey: "username")
                     UserDefaults.standard.synchronize()
+                    self.loadHomeScreen()
 
-                    let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                    delegate.rememberUser()
+//                    let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+//                    delegate.rememberUser()
 //                    self.performSegue(withIdentifier: "toTabBar", sender: nil)
                     
                     
@@ -118,4 +118,27 @@ class SignInVC: UIViewController {
         }
     
     }
+}
+
+extension UIViewController {
+ class func displaySpinner(onView : UIView) -> UIView {
+     let spinnerView = UIView.init(frame: onView.bounds)
+     spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+     let ai = UIActivityIndicatorView.init(style: .large)
+     ai.startAnimating()
+     ai.center = spinnerView.center
+
+     DispatchQueue.main.async {
+         spinnerView.addSubview(ai)
+         onView.addSubview(spinnerView)
+     }
+
+     return spinnerView
+ }
+
+ class func removeSpinner(spinner :UIView) {
+     DispatchQueue.main.async {
+         spinner.removeFromSuperview()
+     }
+ }
 }
