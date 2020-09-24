@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import Parse
 
 class DovizVC: UITableViewController {
 
@@ -23,12 +24,12 @@ class DovizVC: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
+   
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+ 
         return currencies.count
         
     }
@@ -37,11 +38,12 @@ class DovizVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dovizCell", for: indexPath) as! DovizCell
 
-        cell.hisseAd.text = currencies[indexPath.row].ad
-        cell.hisseKod.text = currencies[indexPath.row].kod
+//        dovizCell'imizin textlerine dizimizdeki elemanları yazdırıyoruz.
         cell.hisseId.text = String(currencies[indexPath.row].id)
+        cell.hisseKod.text = currencies[indexPath.row].kod
+        cell.hisseAd.text = currencies[indexPath.row].ad
         cell.hisseTip.text = currencies[indexPath.row].tip
-        // Configure the cell...
+
 
         return cell
     }
@@ -53,80 +55,87 @@ class DovizVC: UITableViewController {
     
     func getLatestData(){
         
-        AF.request("http://bigpara.hurriyet.com.tr/api/v1/hisse/list", method: .get).validate(statusCode: 200..<600).responseJSON { response in
-            switch response.result {
-            case .success(let value):
+//        alamofire kutuphanesi ile url'imizi get methodu ile çağırıyoruz
+        AF.request("http://bigpara.hurriyet.com.tr/api/v1/hisse/list", method: .get).validate().responseJSON { response in
+            
+            if let data = response.data {
                 
-                let json = JSON(value)
-                
-                print(json)
-                
-                for index in 0...json.count{
-                    
-                    let newCurrency = Currency(id:  json[index]["id"].intValue,
-                                               kod: json[index]["kod"].stringValue,
-                                               ad:  json[index]["ad"].stringValue,
-                                               tip: json[index]["tip"].stringValue)
-                    
-                    self.currencies.append(newCurrency)
-                    
+                do {
+//                    gelen json data'yı dönüştürüyoruz.
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    {
+//                        datamızı veriler adlı degiskene atıyoruz
+                        if let veriler = json["data"] as? [[String:Any]] {
+                            
+                            
+                            
+                            for veri in veriler {
+     
+//                                yeni bir degisken ile donusturulen json data içindeki veriler tek tek diziye atılıyor
+                                let newCurrency = Currency(id: veri["id"]  as! Int,
+                                                           kod: veri["kod"] as! String,
+                                                           ad:  veri["ad"]  as! String,
+                                                           tip: veri["tip"] as! String)
+                                
+//                                cekilen yedek dizideki veriler ana diziye aktarılıyor.
+                                self.currencies.append(newCurrency)
+                                
+                            }
+//                            tableView'i yeniliyoruz
+                            self.tableView.reloadData()
+
+                        }
+                    }
+                } catch  {
+//                    hata mesajımız fırlatılıyor
+                    print("Json error: \(error.localizedDescription)")
                 }
-                
-                self.tableView.reloadData()
-                
-                print(self.currencies)
-                
-                
-            case .failure(let error):
-                print(error)
             }
+
         }
         
     }
+    
+    
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @IBAction func logOutClicked(_ sender: Any) {
+        
+        //        let sv = UIViewController.displaySpinner(onView: self.view)
+                PFUser.logOutInBackground { (error) in
+        //            UIViewController.removeSpinner(spinner: sv)
+                    if error != nil {
+                        
+                        let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: UIAlertController.Style.alert)
+                        let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel, handler: nil)
+                        alert.addAction(okButton)
+                        self.present(alert, animated: true, completion: nil)
+                        
+                    }else{
+        //                cıkıs yapılırken user name objesı sılınıyor ve loadSıgnInScreen fonksiyonu ile kayıt&giriş yap sayfasına yonlendırme oluyor.
+                        UserDefaults.standard.removeObject(forKey: "username")
+                        UserDefaults.standard.synchronize()
+                        self.loadSignInScreen()
+        //                let signIn = self.storyboard?.instantiateViewController(identifier: "signIn") as! SignInVC
+        //
+        //                let delegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        //
+        //                delegate.window?.rootViewController = signIn
+                        
+        //                delegate.rememberUser()
+                        
+                    }
+                }
+                
+        
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    func loadSignInScreen(){
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyBoard.instantiateViewController(withIdentifier: "signIn") as! SignInVC
+        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true, completion: nil)
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }

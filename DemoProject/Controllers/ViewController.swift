@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+//        sayfa sayısı kadar pagecontrol noktası olusturulur
         pageControl.numberOfPages = images.count
     }
 
@@ -38,6 +38,7 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource,UI
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SliderCell", for: indexPath) as! SliderCell
         
+//        images dizisinden gelen resimler collection view icine aktarılıyor
         cell.image = images[indexPath.item]
         
         return cell
@@ -50,8 +51,11 @@ extension ViewController: UICollectionViewDelegate,UICollectionViewDataSource,UI
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         currentIndex = Int(scrollView.contentOffset.x / collectionView.frame.size.width)
+//        kacını resım gosterılıyorsa pagecontrol de o basamaga kayar
         pageControl.currentPage = currentIndex
     }
+    
+    
     
     
 }

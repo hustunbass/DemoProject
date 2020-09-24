@@ -9,6 +9,7 @@ import Foundation
 
 
 struct Currency {
+//    api den cektıgımız json verılerını saklamak ıcın kullandıgımız struct
     
    var   id: Int
    var  kod: String

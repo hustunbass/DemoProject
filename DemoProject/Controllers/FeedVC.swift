@@ -36,6 +36,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
     @objc func getData(){
       
         let query = PFQuery(className: "Posts")
+//        postlar createdAt ile son atlan post en ustte olacak sekılde sayfada yuklenıyor
         query.addDescendingOrder("createdAt")
         
         query.findObjectsInBackground { (objects, error) in
@@ -48,6 +49,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
                 self.present(alert, animated: true, completion: nil)
                 
             }else{
+//                daha once ekrana basılmıs postların tekrar basılmaması onlendı
                 self.postOwnerArray.removeAll(keepingCapacity: false)
                 self.postImageArray.removeAll(keepingCapacity: false)
                 self.postUUIDArray.removeAll(keepingCapacity: false)
@@ -77,6 +79,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FeedCell
         
+//        dizilerdeki veriler cell içindeki textlere ekranda bastırılıyor.
         cell.userNameLabel.text = postOwnerArray[indexPath.row]
         cell.postCommentText.text = postCommentArray[indexPath.row]
         cell.postUUIDLabel.text = postUUIDArray[indexPath.row]
@@ -89,7 +92,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
                 self.present(alert, animated: true, completion: nil)
                 
             }else{
-                
+//                atılan posttaki resimde cell ıcıne aktarılıyor
                 cell.postImage.image = UIImage(data: data!)
             }
         }
@@ -112,7 +115,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
                 self.present(alert, animated: true, completion: nil)
                 
             }else{
-                
+//                cıkıs yapılırken user name objesı sılınıyor ve loadSıgnInScreen fonksiyonu ile kayıt&giriş yap sayfasına yonlendırme oluyor.
                 UserDefaults.standard.removeObject(forKey: "username")
                 UserDefaults.standard.synchronize()
                 self.loadSignInScreen()

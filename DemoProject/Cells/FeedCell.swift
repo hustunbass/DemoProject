@@ -44,6 +44,8 @@ class FeedCell: UITableViewCell {
                 
             }else{
                 print("saved")
+                
+//                ONESIGNAL ILE YAZILACAK FONKSIYONLAR
             }
         }
     }
@@ -63,6 +65,10 @@ class FeedCell: UITableViewCell {
                 
             }else{
                 print("saved")
+                
+                //                ONESIGNAL ILE YAZILACAK FONKSIYONLAR
+                
+                
             }
         }
     }

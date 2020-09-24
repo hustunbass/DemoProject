@@ -12,9 +12,19 @@ class SignInVC: UIViewController {
 
     @IBOutlet weak var userNameText: UITextField!
     @IBOutlet weak var passwordText: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(red: 29/255, green: 161/255, blue: 242/255, alpha: 1)
+        
+        signInButton.layer.cornerRadius = 7
+        signInButton.layer.masksToBounds = true
+        
+        signUpButton.layer.cornerRadius = 7
+        signUpButton.layer.masksToBounds = true
         
         
         
