@@ -133,6 +133,7 @@ class FeedVC : UIViewController,UITableViewDelegate,UITableViewDataSource {
         
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyBoard.instantiateViewController(withIdentifier: "signIn") as! SignInVC
+        viewController.modalPresentationStyle = .fullScreen
         self.present(viewController, animated: true, completion: nil)
     }
 }

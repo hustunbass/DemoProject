@@ -6,6 +6,8 @@ target 'DemoProject' do
   use_frameworks!
 
   pod 'Parse'
+  pod 'Alamofire'
+  pod 'SwiftyJSON'  
 
   # Pods for DemoProject
 
