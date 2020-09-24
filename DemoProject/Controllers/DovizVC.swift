@@ -53,7 +53,7 @@ class DovizVC: UITableViewController {
     
     func getLatestData(){
         
-        AF.request("https://bigpara.hurriyet.com.tr/api/v1/hisse/list", method: .get).validate(statusCode: 200..<299).responseJSON { response in
+        AF.request("http://bigpara.hurriyet.com.tr/api/v1/hisse/list", method: .get).validate(statusCode: 200..<600).responseJSON { response in
             switch response.result {
             case .success(let value):
                 

@@ -33,9 +33,12 @@ class SignInVC: UIViewController {
     
 
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let loggedInViewController = storyBoard.instantiateViewController(withIdentifier: "feedVC") as! FeedVC
-        loggedInViewController.modalPresentationStyle = .fullScreen
-        self.present(loggedInViewController, animated: true, completion: nil)
+//        let loggedInViewController = storyBoard.instantiateViewController(withIdentifier: "feedVC") as! FeedVC
+        let mainTabBarController = storyBoard.instantiateViewController(identifier: "tabBar")
+        mainTabBarController.modalPresentationStyle = .fullScreen
+        self.present(mainTabBarController, animated: true, completion: nil)
+        
+        
         
     }
     

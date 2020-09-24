@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "road-1072823_1920.jpg",
+      "filename" : "Leonardo-da-vinci-file-gty-ml-190502_hpMain_16x9_992-2_400x200.jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -17,8 +17,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "template-rendering-intent" : "original"
   }
 }

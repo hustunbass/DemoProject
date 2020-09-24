@@ -16,8 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     
     let images = [
-        UIImage(named: "1"),UIImage(named: "danika-perkinson-QxHJ9lkXYNk-unsplash"),UIImage(named: "3"),
-        UIImage(named: "4")]
+        UIImage(named: "prague_super_city_view-wallpaper-400x240"),UIImage(named: "ballstad_village_lofoten_islands_norway_winter-wallpaper-400x240"),UIImage(named: "moscow_international_business_center_russia-wallpaper-400x240"),
+        UIImage(named: "new_york_4-wallpaper-400x240")]
     
     var currentIndex = 0
     
