@@ -15,11 +15,19 @@ class FeedCell: UITableViewCell {
     
     @IBOutlet weak var postCommentText: UILabel!
     
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var commentButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         postUUIDLabel.isHidden = true
+        
+        likeButton.layer.cornerRadius = 5
+        likeButton.layer.masksToBounds = true
+        
+        commentButton.layer.cornerRadius = 5
+        commentButton.layer.masksToBounds = true
         
     }
     

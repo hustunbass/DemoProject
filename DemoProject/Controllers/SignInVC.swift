@@ -31,6 +31,7 @@ class SignInVC: UIViewController {
 
     }
     
+//    Kullanıcı gırıs yaptıysa direkt tab var acılsın
     override func viewDidAppear(_ animated: Bool) {
         let currentUser = PFUser.current()
         if currentUser != nil{
